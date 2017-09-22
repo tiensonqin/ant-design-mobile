@@ -23,6 +23,9 @@ export default class TextAreaItem extends React.Component<ITextareaItemNativePro
   static defaultProps = {
     onChange() {
     },
+    onContentSizeChange() {
+
+    },
     onFocus() {
     },
     onBlur() {
@@ -48,10 +51,9 @@ export default class TextAreaItem extends React.Component<ITextareaItemNativePro
     };
   }
 
-  onChange = (event) => {
-    const text = event.nativeEvent.text;
+  onContentSizeChange = (event) => {
     let height;
-    const { autoHeight, onChange } = this.props;
+    const { autoHeight } = this.props;
     const rows = this.props.rows as number;
     if (autoHeight) {
       height = event.nativeEvent.contentSize.height;
@@ -62,8 +64,16 @@ export default class TextAreaItem extends React.Component<ITextareaItemNativePro
     }
 
     this.setState({
-      inputCount: text.length,
       height,
+    });
+  }
+
+  onChange = (event) => {
+    const text = event.nativeEvent.text;
+    const { onChange } = this.props;
+
+    this.setState({
+      inputCount: text.length
     });
     if (onChange) {
       onChange(text);
@@ -106,6 +116,7 @@ export default class TextAreaItem extends React.Component<ITextareaItemNativePro
           {...restProps}
           {...valueProps}
           onChange={(event) => this.onChange(event)}
+          onContentSizeChange {(event) => this.onContentSizeChange(event)}
           multiline={rows! > 1 || autoHeight}
           numberOfLines={rows}
           maxLength={maxLength}
